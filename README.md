@@ -5,6 +5,8 @@ Inspired by [acer-predator-turbo](https://github.com/JafarAkhondali/acer-predato
 
 # This tool functions same as the original Linuwu-Sense kernel module with added support for SecureBoot 
 
+this project is forked from [Linuwu-Sense](https://github.com/0x7375646F/Linuwu-Sense)
+
 ## 🚀Installation 
 
 clone project
