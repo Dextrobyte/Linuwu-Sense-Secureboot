@@ -4,12 +4,32 @@ KVER  ?= $(shell uname -r)
 KDIR  := /lib/modules/$(KVER)/build
 PWD   := $(shell pwd)
 
+# My Modification
+SIGN_SCRIPT := $(KDIR)/scripts/sign-file
+KEY_PRIV := $(PWD)/MOK.key
+KEY_DER  := $(PWD)/MOK.der
+
+
+
 MDIR  := /lib/modules/$(KVER)/kernel/drivers/platform/x86
 MODNAME := linuwu_sense
 REAL_USER := $(shell echo $${SUDO_USER:-$$(whoami)})
 
+#all:
+#	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+# My Modification
+
 all:
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
+	@if [ -f $(KEY_PRIV) ] && [ -f $(KEY_DER) ]; then \
+		echo "🔏 Signing module with MOK key..."; \
+		$(SIGN_SCRIPT) sha256 $(KEY_PRIV) $(KEY_DER) src/$(MODNAME).ko; \
+		echo "✅ Module signed successfully."; \
+	else \
+		echo "⚠️  Skipping signing: MOK.key or MOK.der not found."; \
+	fi
+
 
 clean:
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
@@ -35,7 +55,15 @@ uninstall:
 	@sudo depmod -a
 	@echo "Uninstalled $(MODNAME) and cleaned up related configuration."
 
+#install: all
+#---------------
 install: all
+	@if [ -f $(KEY_PRIV) ] && [ -f $(KEY_DER) ]; then \
+		echo "🔏 Re-signing before install to ensure integrity..."; \
+		$(SIGN_SCRIPT) sha256 $(KEY_PRIV) $(KEY_DER) src/$(MODNAME).ko; \
+	fi
+#----------------
+
 	@sudo rmmod acer_wmi 2>/dev/null || true
 	@echo "blacklist acer_wmi" | sudo tee /etc/modprobe.d/blacklist-acer_wmi.conf > /dev/null
 	sudo install -d $(MDIR)
