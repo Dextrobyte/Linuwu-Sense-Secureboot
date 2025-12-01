@@ -1,28 +1,39 @@
-#This tool functions same as the original Linuwu-Sense kernel module with added support for SecureBoot 
+# Unofficial Linux Kernel Module for Acer Gaming RGB Keyboard Backlight and Turbo Mode (Acer Predator , Nitro)
+The code base is still in its early stages, as I’ve just started working on developing this kernel module. It's a bit messy at the moment, but I’m hopeful that, with your help, we can collaborate to improve its structure and make it more organized over time.
 
-##Installation 
+Inspired by [acer-predator-turbo](https://github.com/JafarAkhondali/acer-predator-turbo-and-rgb-keyboard-linux-module), which has a similar goal, this project was born out of my own challenges. I faced issues detecting the Turbo key and ended up using [acer_wmi](https://github.com/torvalds/linux/blob/master/drivers/platform/x86/acer-wmi.c), but it lacked key features like RGB , custom fan support, battery limiter, and more. As a result, I decided to implement these missing features in my own project.
+
+# This tool functions same as the original Linuwu-Sense kernel module with added support for SecureBoot 
+
+## 🚀Installation 
 
 clone project
-```
-bash
+```bash
 git clone https://github.com/Dextrobyte/Linuwu-Sense-Secureboot.git
 cd Linuwu-Sense-Secureboot
 ```
 generate MOK key (Machine Owner Key)
-```
-bash
+```bash
 chmod +x generate-mok-key.sh
 ./generate-mok-key.sh
 
 ```
 Enroll keys in your system
-```
-bash
+```bash
 sudo mokutil --import MOK.der
 ```
 after executing the above command enter a temporary password eg. 1234
-then reboot the system before booting to linux a MOK panel will be shown enter the temporary password in the menu 
+then reboot the system.
+```bash
+sudo reboot
+```
+
+before booting to linux a MOK panel will be shown enter the temporary password in the menu.
+
+
 install required kernel headers
+
+
 For Arch Linux:
 ```bash
 sudo pacman -S linux-headers
@@ -37,33 +48,7 @@ sudo apt install linux-headers-$(uname -r) build-essential
 ```
 
 finally build the module 
-```
-bash
-make install
-```
-
-
-
-# Unofficial Linux Kernel Module for Acer Gaming RGB Keyboard Backlight and Turbo Mode (Acer Predator , Nitro)
-The code base is still in its early stages, as I’ve just started working on developing this kernel module. It's a bit messy at the moment, but I’m hopeful that, with your help, we can collaborate to improve its structure and make it more organized over time.
-
-Inspired by [acer-predator-turbo](https://github.com/JafarAkhondali/acer-predator-turbo-and-rgb-keyboard-linux-module), which has a similar goal, this project was born out of my own challenges. I faced issues detecting the Turbo key and ended up using [acer_wmi](https://github.com/torvalds/linux/blob/master/drivers/platform/x86/acer-wmi.c), but it lacked key features like RGB , custom fan support, battery limiter, and more. As a result, I decided to implement these missing features in my own project.
-
-## 🚀 Installation
-To begin, identify your current kernel version:
 ```bash
-uname -r
-```
-
-Install the appropriate Linux headers based on your kernel version. This module has been tested with kernel version (6.12,6.13 ([previous code base](https://github.com/0x7375646F/Linuwu-Sense/tree/v6.13)),6.14) zen. 
-For Arch Linux:
-```bash
-sudo pacman -S linux-headers
-```
-Next, clone the repository and build the module:
-```bash
-git clone https://github.com/0x7375646F/Linuwu-Sense.git
-cd Linuwu-Sense
 make install
 ```
 The make command will remove the current acer_wmi module and load the patched version.
