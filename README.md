@@ -1,3 +1,49 @@
+#This tool functions same as the original Linuwu-Sense kernel module with added support for SecureBoot 
+
+##Installation 
+
+clone project
+```
+bash
+git clone https://github.com/Dextrobyte/Linuwu-Sense-Secureboot.git
+cd Linuwu-Sense-Secureboot
+```
+generate MOK key (Machine Owner Key)
+```
+bash
+chmod +x generate-mok-key.sh
+./generate-mok-key.sh
+
+```
+Enroll keys in your system
+```
+bash
+sudo mokutil --import MOK.der
+```
+after executing the above command enter a temporary password eg. 1234
+then reboot the system before booting to linux a MOK panel will be shown enter the temporary password in the menu 
+install required kernel headers
+For Arch Linux:
+```bash
+sudo pacman -S linux-headers
+```
+For Fedora Linux:
+```bash
+sudo dnf install kernel-devel kernel-headers
+```
+For Ubuntu Based Distros(mint,pop os,kubuntu,zorin os)
+```bash
+sudo apt install linux-headers-$(uname -r) build-essential
+```
+
+finally build the module 
+```
+bash
+make install
+```
+
+
+
 # Unofficial Linux Kernel Module for Acer Gaming RGB Keyboard Backlight and Turbo Mode (Acer Predator , Nitro)
 The code base is still in its early stages, as I’ve just started working on developing this kernel module. It's a bit messy at the moment, but I’m hopeful that, with your help, we can collaborate to improve its structure and make it more organized over time.
 
